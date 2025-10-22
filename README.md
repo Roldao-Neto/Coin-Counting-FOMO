@@ -70,11 +70,7 @@ git clone https://github.com/Roldao-Neto/Coin-Counting-FOMO/
 
 ```bash
 # Na Raspberry Pi:
-pip install flask
-pip install opencv-python-headless==
-pip install numpy==1.24.2
-pip install picamera2
-pip install tflite-runtime
+pip install -r requirements-rasp.txt
 ```
 
 Adicione o seu modelo (ou o nosso) no projeto e atualize o model_path em app.py.
