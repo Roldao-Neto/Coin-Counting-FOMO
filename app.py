@@ -4,7 +4,7 @@ import io
 import time
 import numpy as np
 from picamera2 import Picamera2
-import cv2  # <-- Adicione este import
+import cv2
 
 app = Flask(__name__)
 model_path = "./ei-contador_moedas_final-lite-float.lite"
@@ -257,7 +257,6 @@ if __name__ == "__main__":
     initialize_camera()
     threading.Thread(target=get_frame, daemon=True).start()
     try:
-        # 'host=0.0.0.0' torna o servidor visível na sua rede local
         app.run(
             host="0.0.0.0", port=5000, debug=True, threaded=True, use_reloader=False
         )
