@@ -82,4 +82,4 @@ Run the Flask server:
 python3 app.py
 ```
 
-Access the dashboard at http://<ip>:5000
+Access the dashboard at http://[ip]:5000
