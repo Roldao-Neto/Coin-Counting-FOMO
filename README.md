@@ -1,8 +1,8 @@
-# Contagem de Moedas com Modelo FOMO (Coin Counting with FOMO):
+# Coin Counting with FOMO:
 
-Projeto de visão computacional embarcada que utiliza um modelo FOMO (Faster Objects, More Objects) em uma Raspberry Pi Zero 2W para detectar, contar e somar moedas (R$ 0,10, R$ 0,50 e R$ 1,00) em tempo real.
+Embedded Real-time Computer Vision Project with FOMO (Faster Objects, More Objects) in a Raspberry Pi Zero 2W to detect, count, and sum Brazilian coins - R$ 0,10, R$ 0,50 e R$ 1,00.
 
-A aplicação serve uma interface web local que exibe o feed de vídeo ao vivo da câmera e atualiza a contagem e o valor total dinamicamente.
+This Application uses a local web interface to display a live video feed from the camera and dynamically update the positions of the coins and the total value.
 
 ## Made by:
 
@@ -10,73 +10,76 @@ A aplicação serve uma interface web local que exibe o feed de vídeo ao vivo d
 - <a href="https://github.com/iRyanRib" target="_blank">RyanRib</a>
 - <a href="https://github.com/rodrigowillsilva" target="_blank">Rodrigo Silva</a>
 
-## Funcionalidades::
+## Functionalities:
 
-- Detecção em Tempo Real: Identifica moedas (10, 50 centavos e 1 Real) usando um modelo FOMO (.lite) via TFLite Runtime.
-- Contagem e Soma: Calcula a quantidade de cada moeda e o valor monetário total.
-- Interface Web: Exibe o feed de vídeo ao vivo (streaming MJPEG) e os resultados atualizados dinamicamente via Flask.
-- Estabilização de Detecção: Utiliza um "grid de frequência" (freq_grid) para estabilizar as detecções e evitar contagens flutuantes (flickering).
-- Agrupamento de Detecções: Usa cv2.connectedComponentsWithStats para agrupar células de detecção adjacentes, contando moedas parcialmente cobertas ou detectadas em múltiplos quadrantes como um único objeto.
+- Real Time Detection: Identify coins using a FOMO model with TFLite Runtime.
+- Counting and Total Value: Calculate how many coins we have for each class and update the total value accordingly.
+- Web Interface: Display the live video feed (streaming MJPEG) and update the results via Flask.
+- Frequency Grid: Stabilize the detection in order to avoid flickering.
+- Clustering Detections: Use cv2.connectedComponentsWithStats to group together adjacent detection cells, counting partially covered coins and multiple detections for the same coin as a unique object.
 
-## Tecnologias Utilizadas:
+## Technologies:
 
-- **Hardware**: Raspberry Pi Zero 2W, Câmera (Picamera2)
+- **Hardware**: Raspberry Pi Zero 2W with Camera (Picamera2)
 
 - **Backend**: Python, Flask, TensorFlow Lite Runtime, OpenCV (opencv-python-headless), NumPy
 
 - **Frontend**: HTML, CSS, JavaScript (Vanilla)
 
-- **Modelo de ML**: FOMO (treinado na Edge Impulse)
+- **ML Model**: FOMO (Trained with Edge Impulse)
 
-## Como Funciona:
+## How it Works:
 
-A aplicação é dividida em um backend (Flask) e um frontend (HTML/CSS/JS).
+The App is divided between a backend (Flask) and a frontend (HTML/CSS/JS).
 
 **Backend** (app.py)
-- Servidor Flask: Inicia um servidor web.
 
-- Câmera: A Picamera2 é inicializada. Uma thread (get_frame) captura continuamente imagens da câmera e as armazena na memória (frame).
+- Flask Server: Starts the web server.
 
-- Stream de Vídeo (/video_feed):
+- Camera: The Picamera2 is started. A thread (get_frame) captures images from the camera and stores them in memory (frame).
 
-1) Uma rota de streaming MJPEG (gen_frames) busca o frame mais recente.
+- Video Stream (/video_feed):
 
-2) O frame é processado pela função processar_frame, que executa a inferência do modelo TFLite.
+1) The streaming route (gen_frames) searches for the most recent frame.
 
-3) A saída do FOMO (um heatmap) é estabilizada pelo freq_grid.
+2) The frame is processed by a function called "processar_frame", which makes the inference of the tflite model.
 
-4) cv2.connectedComponentsWithStats agrupa os centroides detectados.
+3) The FOMO output (heatmap) is stabilized by freq_grid.
 
-5) Elipses são desenhadas sobre as moedas detectadas e o frame é enviado para o navegador.
+4) cv2.connectedComponentsWithStats groups the detected centroids.
 
-- API de Dados (/data):
+5) Circumferences are drawn over the detected coins, and the frame is sent to the browser.
 
-- Os resultados da contagem (counts) e o total (total) são armazenados em uma variável global (global_data) protegida por um threading.Lock.
+- Data API (/data)
 
-- Esta rota simplesmente retorna o conteúdo de global_data em formato JSON.
+- The results (counts & total) are stored in a global variable (global_data) protected by a threading.Lock.
 
 **Frontend** (index.html, main.js, styles.css)
-- HTML: Estrutura a página com um elemento <img> (que aponta para /video_feed) e <span>s para exibir os valores.
 
-- JavaScript: O main.js executa uma função atualizarValores a cada 500ms.
+- HTML: Structures the page.
 
-- Fetch API: Essa função faz uma requisição fetch para a rota /data, recebe o JSON e atualiza o conteúdo dos <span>s com os novos valores de contagem e o total formatado (R$).
+- JavaScript: Main.js runs the function "atualizarValores" (update Values) every 500ms.
 
-## Instalação e Execução:
+- Fetch API: This function fetches JSON from /data, receives the JSON, and updates the <span> content with the new counts and the total formatted (R$).
+
+## Installation:
 
 ```bash
 git clone https://github.com/Roldao-Neto/Coin-Counting-FOMO/
+cd Coin-Counting-FOMO
 ```
 
 ```bash
-# Na Raspberry Pi:
+# In the Raspberry Pi (or another device):
 pip install -r requirements-rasp.txt
 ```
 
-Adicione o seu modelo (ou o nosso) no projeto e atualize o model_path em app.py.
+Add your own model (or our model) in the project and update the model_path in app.py.
 
-Rode o servidor flask com o seguinte comando no terminal:
+Run the Flask server:
 
 ```bash
 python3 app.py
 ```
+
+Access the dashboard at http://<ip>:5000
