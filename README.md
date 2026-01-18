@@ -4,6 +4,8 @@ Embedded Real-time Computer Vision Project with FOMO (Faster Objects, More Objec
 
 This Application uses a local web interface to display a live video feed from the camera and dynamically update the positions of the coins and the total value.
 
+https://github.com/user-attachments/assets/0d78fc98-8597-48a2-aff9-6555e24eefa8
+
 ## Made by:
 
 - <a href="https://github.com/Roldao-Neto" target="_blank">Roldão Neto</a>
